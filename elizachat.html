@@ -28,19 +28,20 @@
     
     <p><strong>Previous :</strong>{{.Previous}}</p>
    
-   
+    
+   <p><strong>User     :</strong>{{.Input}}</p>
+    <p><strong>Response :</strong>{{.Output}}</p>
    
    
     <form action="/chat" method="GET">
         <div class="form-group fixed-bottom">
           <label for="exampleInputEmail1">Enter Chat</label>
-          <input type="text" name="chat" placeholder="Enter email">
-          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          <input type="text" name="chat" placeholder="Say">
+         
        
         <button type="submit" class="btn btn-primary">Chat</button> 
       </div>
       </form>
-   
   
    
    
@@ -49,8 +50,7 @@
       <input type="text" name="chat">
       <input type="submit" value="Chat">
     </form>
-    <p><strong>User     :</strong>{{.Input}}</p>
-    <p><strong>Response :</strong>{{.Output}}</p>
+   
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
