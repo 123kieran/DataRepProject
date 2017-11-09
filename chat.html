@@ -29,27 +29,23 @@
     <p><strong>Previous :</strong>{{.Previous}}</p>
    
     
-   <p><strong>User     :</strong>{{.Input}}</p>
-    <p><strong>Response :</strong>{{.Output}}</p>
-   
+ 
    
     <form action="/chat" method="GET">
         <div class="form-group fixed-bottom">
           <label for="exampleInputEmail1">Enter Chat</label>
-          <input type="text" name="chat" placeholder="Say">
+          <input type="text" name="chat" placeholder="Say Hello to Eliza!">
          
        
-        <button type="submit" class="btn btn-primary">Chat</button> 
+        <button type="submit" value="Chat" >Chat</button> 
       </div>
       </form>
   
    
    
-    <!-- a form with action redirecting to /chat using http:GET method
-    <form action="/chat" method="GET">
-      <input type="text" name="chat">
-      <input type="submit" value="Chat">
-    </form>
+ 
+
+
    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -18,7 +18,7 @@ type myMsg struct {
 
 func requestHandler(w http.ResponseWriter, r *http.Request) {
 	//serve the homepage.html file
-	http.ServeFile(w, r, "elizachat.html")
+	http.ServeFile(w, r, "chat.html")
 }
 
 func chatHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +28,7 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 	input := r.FormValue("chat")
 	previous := input
 
-	t, _ := template.ParseFiles("elizachat.html")
+	t, _ := template.ParseFiles("chat.html")
 
 	//execute template and pass pointer to myMsg 	struct
 	t.Execute(w, &myMsg{Input: input, Output: output, Previous: previous})
@@ -39,6 +39,6 @@ func main() {
 	http.HandleFunc("/", requestHandler)
 
 	//handle /chat page
-	http.HandleFunc("/elixachat", chatHandler)
+	http.HandleFunc("/chat", chatHandler)
 	http.ListenAndServe(":8080", nil)
 }
