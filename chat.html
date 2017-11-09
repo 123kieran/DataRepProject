@@ -26,12 +26,26 @@
         </nav>
 
     
+    <!-- Optional JavaScript 
     <p><strong >Me :</strong>{{.Previous}}</p>
     <p><strong>User     :</strong>{{.Input}}</p>
     <p><strong>Response :</strong>{{.Output}}</p>
-    
+    -->
  
-   
+
+
+
+      <ul id="chatbox" class="w3-ul">
+          <li class="w3-bar w3-round-large" style="border: none">
+              <div class="w3-bar-item">
+                  
+                  
+                  <span>{{.Input}} </span>
+              </div>
+          </li>
+      </ul>
+
+  
     <form action="/chat" method="GET">
         <div class="form-group fixed-bottom">
           <label for="exampleInputEmail1">Enter Chat</label>
@@ -42,8 +56,12 @@
       </div>
       </form>
   
-   
-   
+      <!-- footer 
+    <! <footer class="w3-bar w3-light-gray w3-opacity" style="position:fixed; bottom:0; "> 
+      <footer class="w3-bar w3-light-gray w3-opacity" style="position: fixed; bottom: 0; width: 100%">
+        <p class="w3-center"> Eliza Chatbot - Data Representation and Querying</p>
+    </footer>
+   -->
  
 
 
