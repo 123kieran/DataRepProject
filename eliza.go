@@ -42,5 +42,5 @@ func main() {
 
 	//handle /chat page
 	http.HandleFunc("/chat", chatHandler)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":4444", nil)
 }
