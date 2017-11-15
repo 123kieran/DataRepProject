@@ -29,7 +29,7 @@ func buildResponseList() []Response {
 
 	allResponses := []Response{}
 
-	file, err := os.Open("./data/patterns.dat")
+	file, err := os.Open("./data/responses.txt")
 	if err != nil { // there IS an error
 		panic(err) // crash the program
 	}
