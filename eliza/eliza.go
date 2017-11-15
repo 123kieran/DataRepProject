@@ -29,7 +29,7 @@ func buildResponseList() []Response {
 
 	allResponses := []Response{}
 
-	file, err := os.Open("./data/responses.txt")
+	file, err := os.Open("./data/patterns.dat")
 	if err != nil { // there IS an error
 		panic(err) // crash the program
 	}
@@ -127,5 +127,26 @@ func Ask(userInput string) string {
 
 	// if we're down here, it means there were no matches;
 	return "Sorry, that's a little above my paygrade." // catch all.
-
+	/*
+		//patternStr := "name is (.*)" // Hello my name is bob
+		// MustCompile, Compile to make a *regexp.Regexp struct
+		//re := regexp.MustCompile(patternStr)
+		if re.MatchString(userInput) {
+			fmt.Println("There was a match!")
+			//re.FindStringSubmatch()
+			match := re.FindStringSubmatch(userInput)
+			//match[0] is full match, match[1] is the capture group
+			captured := match[1]
+			fmt.Println(captured)
+			formatString := "Hello %s, it's nice to meet" // this is the format string
+			answer := fmt.Sprintf(formatString, captured)
+			fmt.Println(answer)
+		} else {
+			fmt.Println("There was no match")
+		}
+		// slice / list of answers, and I return 1 at random
+		// Hi bob
+		// Hello bob
+		// how's it hanging bob
+	*/
 }
