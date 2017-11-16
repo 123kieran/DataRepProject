@@ -61,9 +61,6 @@ func getRandomAnswer(answers []string) string {
 }
 
 func subWords(original string) string {
-	// https://www.smallsurething.com/implementing-the-famous-eliza-chatbot-in-python/
-	//reflections = readLines("file/path")// []string am:are
-
 	if reflections == nil { // map hasn't been made yet
 		reflections = map[string]string{ // will only happen once.
 			"am":     "are",
@@ -100,7 +97,6 @@ func subWords(original string) string {
 
 func Ask(userInput string) string {
 
-	// My name is bob
 	responses := buildResponseList()
 
 	for _, resp := range responses { // look at every single response/pattern/answers

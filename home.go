@@ -24,11 +24,6 @@ func chat(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
-	// test question
-	//q1 := "hi my name is tom"
-	//fmt.Println(eliza.Ask(q1))
-
 	//handle requests by calling chat function
 	http.HandleFunc("/", chat)
 
