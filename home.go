@@ -6,29 +6,29 @@ import (
 	"net/http"
 
 	"./eliza"
+	//	"strings"
+	//	"bytes"
 )
 
-//adapted from https://stackoverflow.com/questions/23282311/parse-input-from-html-form-in-golang
-func chat(w http.ResponseWriter, r *http.Request) {
+func chatHandler(w http.ResponseWriter, r *http.Request) {
+	// this is code that runs when a request is made to the /ask resource.
+	userInput := r.URL.Query().Get("user-input")
+	reply := eliza.AskEliza(userInput)
+	fmt.Fprintf(w, reply)
 
-	http.ServeFile(w, r, "webApp/Chat.html")
-
-	//Call to ParseForm makes form fields available.
-	err := r.ParseForm()
-	if err != nil {
-		// Handle error here via logging and then return
-	}
-	//take user input from the form on ElizaChat
-	userQuestion := r.PostFormValue("userInput")
-	fmt.Println(eliza.Ask((userQuestion))) //id ElizaAnswer
-}
+} //chatHandler
 
 func main() {
-	//handle requests by calling chat function
-	http.HandleFunc("/", chat)
 
-	//start webserver and serve on port 8080
+	//serve the files from the /static folder
+	dir := http.Dir("./webApp")
+	fileServer := http.FileServer(dir)
+
+	//handle requests to /
+	http.Handle("/", fileServer)
+	//handle request to /chat
+	http.HandleFunc("/chat", chatHandler)
+
 	log.Println("Listening....")
-	http.ListenAndServe(":5555", nil)
-
+	http.ListenAndServe(":1122", nil)
 }

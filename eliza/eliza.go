@@ -10,118 +10,120 @@ import (
 	"time"
 )
 
-var reflections map[string]string
-
+//create struct of responses
 type Response struct {
-	re      *regexp.Regexp
-	answers []string
+	Patterns *regexp.Regexp
+	Answers  []string
 }
 
-func NewResponse(pattern string, answers []string) Response {
-	response := Response{}
-	re := regexp.MustCompile(pattern)
-	response.re = re
-	response.answers = answers
+func makeResponses(path string) []Response {
+	fullFile, _ := ReadLines(path)
+	responses := make([]Response, 0)
+	for i := 0; i < len(fullFile); i += 2 {
+		allPatterns := strings.Split(fullFile[i], ";")
+		allResponses := strings.Split(fullFile[i+1], ";")
+		for _, pattern := range allPatterns {
+			pattern = "(?i)" + pattern
+			Patterns := regexp.MustCompile(pattern)
+			responses = append(responses, Response{Patterns: Patterns, Answers: allResponses})
+		}
+	}
+	return responses
+}
+
+//test if responses are being populated
+func PrintResponses(path string) {
+	response := makeResponses(path)
+	fmt.Printf("%+v\n", response)
+}
+
+//read lines from file
+//adapted from https://stackoverflow.com/questions/8757389/reading-file-line-by-line-in-go
+func ReadLines(path string) ([]string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		readLine := scanner.Text()
+
+		if skipComment(readLine) {
+			continue
+		}
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
+}
+func skipComment(readLine string) bool {
+	return strings.HasPrefix(readLine, "//") || len(strings.TrimSpace(readLine)) == 0
+}
+
+func subWords(inputStr string) string {
+	// split inputStr into slice of strings
+	splitStr := strings.Fields(inputStr)
+
+	//map of reflected words
+	words := map[string]string{
+		"i":      "you",
+		"was":    "were",
+		"i'd":    "you would",
+		"i've":   "you have",
+		"i'll":   "you will",
+		"my":     "your",
+		"are":    "am",
+		"you've": "I have",
+		"you'll": "I will",
+		"your":   "my",
+		"yours":  "mine",
+		"you":    "I",
+		"me":     "you",
+		"me.":    "you",
+		"you're": "I’m",
+	}
+
+	// swap words
+	for index, word := range splitStr {
+		if value, ok := words[strings.ToLower(word)]; ok {
+			splitStr[index] = value
+		}
+	}
+
+	return strings.Join(splitStr, " ")
+}
+
+func wordSwapper(pattern *regexp.Regexp, input string) string {
+	match := pattern.FindStringSubmatch(input)
+	if len(match) == 1 {
+		return "" // no capture is needed
+	}
+	wordSwap := match[1]
+	return wordSwap
+}
+
+func responseBuilder(response, wordSwap string) string {
+	if strings.Contains(response, "%s") {
+		return fmt.Sprintf(response, wordSwap)
+	}
 	return response
 }
 
-func buildResponseList() []Response {
+func AskEliza(input string) string {
+	//create response[]response from file
+	response := makeResponses("./data/responses.dat")
+	rand.Seed(time.Now().Unix())
 
-	allResponses := []Response{}
-
-	file, err := os.Open("./data/patterns.dat")
-	if err != nil { // there IS an error
-		panic(err) // crash the program
-	}
-
-	// file exists!
-	defer file.Close() // this will be called AFTER this function.
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		//fmt.Println(scanner.Text())
-
-		patternStr := scanner.Text()
-		scanner.Scan() // move onto the next line which holds the answers
-		answersAsStr := scanner.Text()
-
-		answerList := strings.Split(answersAsStr, ";")
-		resp := NewResponse(patternStr, answerList)
-		allResponses = append(allResponses, resp)
-	}
-
-	return allResponses
-}
-
-func getRandomAnswer(answers []string) string {
-	rand.Seed(time.Now().UnixNano()) // seed to make it return different values.
-	index := rand.Intn(len(answers)) // Intn generates a number between 0 and num - 1
-	return answers[index]            // can be any element
-}
-
-func subWords(original string) string {
-	if reflections == nil { // map hasn't been made yet
-		reflections = map[string]string{ // will only happen once.
-			"am":     "are",
-			"was":    "were",
-			"i":      "you",
-			"i'd":    "you would",
-			"i've":   "you have",
-			"i'll":   "you will",
-			"my":     "your",
-			"are":    "am",
-			"you've": "I have",
-			"you'll": "I will",
-			"your":   "my",
-			"yours":  "mine",
-			"you":    "me",
-			"me":     "you",
-		}
-	}
-	// when we're we can be sure reflectiosn map is populated.
-
-	words := strings.Split(original, " ")
-
-	for index, word := range words {
-		// we want to change the word if it's in the map
-		val, ok := reflections[word]
-		if ok { // value WAS in the map
-			// we want to swap with the value
-			words[index] = val // eg. you -> me
+	for _, response := range response {
+		if response.Patterns.MatchString(input) {
+			wordSwap := wordSwapper(response.Patterns, input)
+			genResp := response.Answers[rand.Intn(len(response.Answers))]
+			genResp = responseBuilder(genResp, wordSwap)
+			return genResp
 		}
 	}
 
-	return strings.Join(words, " ")
-}
-
-func Ask(userInput string) string {
-
-	responses := buildResponseList()
-
-	for _, resp := range responses { // look at every single response/pattern/answers
-
-		if resp.re.MatchString(userInput) {
-			match := resp.re.FindStringSubmatch(userInput)
-			//match[0] is full match, match[1] is the capture group
-			captured := match[1]
-
-			// remove punctuation here! <------
-
-			captured = subWords(captured)
-
-			formatAnswer := getRandomAnswer(resp.answers) // get random element.
-
-			if strings.Contains(formatAnswer, "%s") { // string needs to be formatted
-				formatAnswer = fmt.Sprintf(formatAnswer, captured)
-			}
-			return formatAnswer
-
-		} // if
-
-	} // for
-
-	//  there were no matches;
-	return "Sorry, there was no match" // catch all.
-
+	return "Why do you say that?"
 }
