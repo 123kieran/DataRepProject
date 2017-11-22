@@ -20,7 +20,9 @@ form.keypress(function(event){
             const newItem = '<li  class="list-group-item list-group-item-success">'+"ELiza : " + resp + "</li>";
             setTimeout(function(){
                 list.append(newItem)
+                $("html, body").scrollTop($("body").height());
             }, 1000);//set timeout to give wait to response
+            
         }).fail(function(){
             const newItem = "<li class='list-group-item list-group-item-danger' >Come back Later.</li>";
             list.append(newItem);
