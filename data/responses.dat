@@ -76,5 +76,5 @@ I'm worried about (.*)
 Why are you worried about %s?;What makes you worried about %s?
 (Hello);(\bhi\b);(hey)
 Hello, shall we begin?;Hi, how are you?
-Eliza
+Eliza(.*)
 I'm glad you remembered my name.;So, you remembered by name.

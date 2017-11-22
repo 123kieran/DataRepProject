@@ -16,6 +16,7 @@ type Response struct {
 	Answers  []string
 }
 
+//this function creates elizas response
 func makeResponses(path string) []Response {
 	fullFile, _ := ReadLines(path)
 	responses := make([]Response, 0)
@@ -68,8 +69,9 @@ func subWords(inputStr string) string {
 
 	//map of reflected words
 	words := map[string]string{
-		"i":      "you",
+		"am":     "are",
 		"was":    "were",
+		"i":      "you",
 		"i'd":    "you would",
 		"i've":   "you have",
 		"i'll":   "you will",
@@ -79,10 +81,8 @@ func subWords(inputStr string) string {
 		"you'll": "I will",
 		"your":   "my",
 		"yours":  "mine",
-		"you":    "I",
+		"you":    "me",
 		"me":     "you",
-		"me.":    "you",
-		"you're": "I’m",
 	}
 
 	// swap words
@@ -95,18 +95,18 @@ func subWords(inputStr string) string {
 	return strings.Join(splitStr, " ")
 }
 
-func wordSwapper(pattern *regexp.Regexp, input string) string {
+func replaceWords(pattern *regexp.Regexp, input string) string {
 	match := pattern.FindStringSubmatch(input)
 	if len(match) == 1 {
 		return "" // no capture is needed
 	}
-	wordSwap := match[1]
-	return wordSwap
+	replaceWord := match[1]
+	return replaceWord
 }
 
-func responseBuilder(response, wordSwap string) string {
+func responseBuilder(response, replaceWord string) string {
 	if strings.Contains(response, "%s") {
-		return fmt.Sprintf(response, wordSwap)
+		return fmt.Sprintf(response, replaceWord)
 	}
 	return response
 }
@@ -118,9 +118,9 @@ func AskEliza(input string) string {
 
 	for _, response := range response {
 		if response.Patterns.MatchString(input) {
-			wordSwap := wordSwapper(response.Patterns, input)
+			replaceWord := replaceWords(response.Patterns, input)
 			genResp := response.Answers[rand.Intn(len(response.Answers))]
-			genResp = responseBuilder(genResp, wordSwap)
+			genResp = responseBuilder(genResp, replaceWord)
 			return genResp
 		}
 	}
