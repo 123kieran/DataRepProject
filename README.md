@@ -34,8 +34,3 @@ eg. > cd DataRepProject
 To run the chatbot enter './' followed by the executable produced
 For Windows:
 > ./home.exe
-<<<<<<< HEAD
-```
-=======
-```
->>>>>>> 26c26e3ca232deca46604bfd60b9eedaef63c7ec
