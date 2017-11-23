@@ -38,31 +38,6 @@ func PrintResponses(path string) {
 	fmt.Printf("%+v\n", response)
 }
 
-//read lines from file
-//adapted from https://stackoverflow.com/questions/8757389/reading-file-line-by-line-in-go
-func ReadLines(path string) ([]string, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		readLine := scanner.Text()
-
-		if skipComment(readLine) {
-			continue
-		}
-		lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
-}
-func skipComment(readLine string) bool {
-	return strings.HasPrefix(readLine, "//") || len(strings.TrimSpace(readLine)) == 0
-}
-
 func subWords(inputStr string) string {
 	// split inputStr into slice of strings
 	splitStr := strings.Fields(inputStr)
@@ -93,6 +68,31 @@ func subWords(inputStr string) string {
 	}
 
 	return strings.Join(splitStr, " ")
+}
+
+//read lines from file
+//adapted from https://stackoverflow.com/questions/8757389/reading-file-line-by-line-in-go
+func ReadLines(path string) ([]string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		readLine := scanner.Text()
+
+		if skipComment(readLine) {
+			continue
+		}
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
+}
+func skipComment(readLine string) bool {
+	return strings.HasPrefix(readLine, "//") || len(strings.TrimSpace(readLine)) == 0
 }
 
 func replaceWords(pattern *regexp.Regexp, input string) string {
