@@ -17,7 +17,7 @@ form.keypress(function(event){
     const queryParams = {"user-input" : userText }
     $.get("/chat", queryParams)
         .done(function(resp){
-            const newItem = '<li  class="list-group-item list-group-item-success">'+"ELiza : " + resp + "</li>";
+            const newItem = '<li  class="list-group-item list-group-item-danger">'+"ELiza : " + resp + "</li>";
             setTimeout(function(){
                 list.append(newItem)
                 // for the auto fix to the bottom go to https://stackoverflow.com/questions/47425453/html-css-auto-scroll-page-to-bottom
