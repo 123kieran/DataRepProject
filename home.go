@@ -30,5 +30,5 @@ func main() {
 	http.HandleFunc("/chat", chatHandler)
 
 	log.Println("Listening....")
-	http.ListenAndServe(":1122", nil)
+	http.ListenAndServe(":8080", nil)
 }
